@@ -189,6 +189,8 @@ export interface AdapterConfig {
     image: string[];
     /** Onde procurar o texto "no Pix". */
     pix?: string[];
+    /** Onde ancorar o selo. Padrão: os seletores de preço. Prefira a linha inteira do preço. */
+    badgeAnchor?: string[];
   };
 }
 
@@ -203,7 +205,8 @@ export function createAdapter(config: AdapterConfig): StoreAdapter {
     matches: (url) => config.hostPattern.test(url.hostname),
     getProductId: config.getProductId,
     findPriceElement(doc) {
-      for (const selector of config.selectors.price) {
+      for (const selector of [...(config.selectors.badgeAnchor ?? []), ...config.selectors.price]) {
+        if (selector.startsWith('meta')) continue;
         const el = doc.querySelector(selector);
         if (el) return el;
       }

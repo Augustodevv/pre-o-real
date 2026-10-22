@@ -32,5 +32,6 @@ export const mercadoLivre = createAdapter({
     listPrice: ['.ui-pdp-price__original-value', '.ui-pdp-price .andes-money-amount--previous'],
     image: ['img.ui-pdp-gallery__figure__image', '.ui-pdp-gallery img'],
     pix: ['.ui-pdp-price__subtitles', '.ui-pdp-price'],
+    badgeAnchor: ['.ui-pdp-price__second-line'],
   },
 });

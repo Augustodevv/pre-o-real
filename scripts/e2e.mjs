@@ -65,6 +65,39 @@ for (const p of pages) {
   console.log(`${ok ? '✔' : '✘'} ${p.store}/${p.file}${saved ? ` → ${saved.name} (${saved.lastPrice})` : ''}`);
 }
 
+// Simula 4 semanas de histórico com aumento antes da "promoção" e confere o selo.
+const catalog = pages.find((p) => p.file === 'catalogo-jsonld.html');
+if (catalog) {
+  const key = `${catalog.store}:${catalog.spec.expected.productId}`;
+  await popup.evaluate((key) => new Promise((res) => {
+    const req = indexedDB.open('preco-real');
+    req.onsuccess = () => {
+      const store = req.result.transaction('prices', 'readwrite').objectStore('prices');
+      const prices = [[28, 92], [24, 89.9], [20, 91], [16, 90], [12, 89.9], [6, 129.9], [4, 134.9], [2, 139.9]];
+      for (const [ago, price] of prices) {
+        const d = new Date(); d.setDate(d.getDate() - ago);
+        const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        store.put({ key, day, price, listPrice: null, pixPrice: null, capturedAt: d.getTime() });
+      }
+      store.transaction.oncomplete = res;
+    };
+  }), key);
+
+  const tab = await context.newPage();
+  await tab.setViewportSize({ width: 1100, height: 700 });
+  await tab.goto(catalog.spec.url);
+  const host = tab.locator('preco-real-selo');
+  await host.waitFor({ timeout: 5000 });
+  await tab.waitForTimeout(500);
+  const box = await host.boundingBox();
+  await tab.screenshot({ path: '.output/selo.png' });
+  await tab.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await tab.waitForTimeout(500);
+  await tab.screenshot({ path: '.output/painel.png' });
+  console.log(`✔ selo exibido em (${Math.round(box.x)}, ${Math.round(box.y)}) e painel aberto`);
+  await tab.close();
+}
+
 await popup.setViewportSize({ width: 380, height: 480 });
 await popup.reload();
 await popup.waitForTimeout(500);
