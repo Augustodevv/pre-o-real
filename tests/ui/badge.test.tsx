@@ -32,6 +32,7 @@ const product: Product = {
   targetPrice: null,
   lastCheckAt: null,
   lastCheckError: null,
+  alertedPrice: null,
 };
 
 const rec = (day: string, price: number, listPrice: number | null = null): PriceRecord => ({

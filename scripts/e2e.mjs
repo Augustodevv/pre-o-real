@@ -7,6 +7,9 @@ import { mkdtempSync, readdirSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
+// Permite interceptar também as requisições feitas pelo service worker (verificação automática).
+process.env.PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS = '1';
+
 const extensionPath = resolve('.output/chrome-mv3');
 const fixturesDir = resolve('tests/fixtures');
 
@@ -26,7 +29,7 @@ for (const store of readdirSync(fixturesDir, { withFileTypes: true }).filter((d)
 
 await context.route(/^https?:\/\//, (route) => {
   const url = route.request().url();
-  const page = pages.find((p) => p.spec.url.split('#')[0] === url);
+  const page = pages.find((p) => p.spec.url.split('#')[0] === url || p.spec.expected?.url === url);
   if (page) return route.fulfill({ contentType: 'text/html; charset=utf-8', body: page.html });
   if (route.request().resourceType() === 'document') return route.fulfill({ status: 404, body: '' });
   return route.abort();
@@ -98,10 +101,48 @@ if (catalog) {
   await tab.close();
 }
 
-await popup.setViewportSize({ width: 380, height: 480 });
+// Fluxo de alertas: acompanha um produto com alvo acima do preço atual, força a
+// verificação automática (fetch + documento offscreen) e confere a notificação.
+{
+  const kabum = pages.find((p) => p.store === 'kabum' && p.spec.expected);
+  if (kabum) {
+    const key = `kabum:${kabum.spec.expected.productId}`;
+    await popup.evaluate((key) => new Promise((res) => {
+      const req = indexedDB.open('preco-real');
+      req.onsuccess = () => {
+        const store = req.result.transaction('products', 'readwrite').objectStore('products');
+        const get = store.get(key);
+        get.onsuccess = () => {
+          store.put({ ...get.result, tracked: true, targetPrice: 1900, lastCheckAt: null, alertedPrice: null });
+          store.transaction.oncomplete = res;
+        };
+      };
+    }), key);
+    const result = await popup.evaluate(() => chrome.runtime.sendMessage({ type: 'runChecks' }));
+    const after = await popup.evaluate((key) => new Promise((res) => {
+      const req = indexedDB.open('preco-real');
+      req.onsuccess = () => {
+        const get = req.result.transaction('products').objectStore('products').get(key);
+        get.onsuccess = () => res(get.result);
+      };
+    }), key);
+    const notifications = await worker.evaluate(() => chrome.notifications.getAll());
+    const ok = result.checked === 1 && result.alerted === 1 && after.lastCheckAt && !after.lastCheckError && notifications[key];
+    if (!ok) failures++;
+    console.log(`${ok ? '✔' : '✘'} verificação automática e alerta: ${JSON.stringify(result)}${after.lastCheckError ? ' — ' + after.lastCheckError : ''}`);
+  }
+}
+
+await popup.setViewportSize({ width: 380, height: 580 });
 await popup.reload();
 await popup.waitForTimeout(500);
-await popup.screenshot({ path: process.env.SCREENSHOT ?? '.output/popup.png' });
+await popup.screenshot({ path: '.output/popup.png' });
+await popup.getByRole('tab', { name: /Acompanhando/ }).click();
+await popup.waitForTimeout(300);
+await popup.screenshot({ path: '.output/popup-acompanhando.png' });
+await popup.getByRole('tab', { name: 'Configurações' }).click();
+await popup.waitForTimeout(300);
+await popup.screenshot({ path: '.output/popup-configuracoes.png' });
 
 await context.close();
 console.log(failures ? `\n${failures} falha(s)` : '\nTudo certo.');

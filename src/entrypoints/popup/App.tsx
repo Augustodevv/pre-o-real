@@ -1,43 +1,55 @@
-import { useEffect, useState } from 'react';
-import { STORE_NAMES } from '../../adapters';
-import { listProducts } from '../../core/db';
-import { formatBRL } from '../../core/price';
-import type { Product } from '../../core/types';
+import { useState } from 'react';
+import { ProductsTab } from '../../popup/ProductsTab';
+import { SettingsPanel } from '../../popup/SettingsPanel';
+import { TrackingTab } from '../../popup/TrackingTab';
+import { useProducts } from '../../popup/useProducts';
 
-// Versão inicial (Etapa 1): apenas lista o que foi capturado.
+type Tab = 'produtos' | 'acompanhando' | 'configuracoes';
+
 export default function App() {
-  const [products, setProducts] = useState<Product[] | null>(null);
+  const [tab, setTab] = useState<Tab>('produtos');
+  const { items, reload, update } = useProducts();
+  const trackedCount = items?.filter((i) => i.product.tracked).length ?? 0;
 
-  useEffect(() => {
-    listProducts().then(setProducts);
-  }, []);
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'produtos', label: `Produtos${items?.length ? ` (${items.length})` : ''}` },
+    { id: 'acompanhando', label: `Acompanhando${trackedCount ? ` (${trackedCount})` : ''}` },
+    { id: 'configuracoes', label: 'Configurações' },
+  ];
 
   return (
-    <main className="font-sans text-slate-800">
-      <header className="bg-emerald-600 px-4 py-3 text-white">
-        <h1 className="text-lg font-bold">Preço Real</h1>
-        <p className="text-xs opacity-90">Produtos vistos</p>
+    <main className="flex h-[580px] flex-col font-sans text-slate-800">
+      <header className="flex items-center gap-2 bg-emerald-600 px-4 py-3 text-white">
+        <img src="/icon/32.png" alt="" className="h-6 w-6 rounded" />
+        <div>
+          <h1 className="text-base font-bold leading-tight">Preço Real</h1>
+          <p className="text-[11px] leading-tight opacity-90">Descubra se o desconto é de verdade</p>
+        </div>
       </header>
-      {products === null ? null : products.length === 0 ? (
-        <p className="p-6 text-center text-sm text-slate-500">
-          Nenhum produto ainda. Abra um produto no Mercado Livre, Amazon, Magalu, KaBuM! ou Casas Bahia para começar.
-        </p>
-      ) : (
-        <ul className="divide-y divide-slate-100">
-          {products.map((p) => (
-            <li key={p.key}>
-              <a href={p.url} target="_blank" className="flex gap-3 px-4 py-3 hover:bg-slate-50">
-                {p.imageUrl && <img src={p.imageUrl} alt="" className="h-12 w-12 rounded object-contain" />}
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{p.name}</p>
-                  <p className="text-xs text-slate-500">{STORE_NAMES[p.store]}</p>
-                  <p className="text-sm font-semibold">{formatBRL(p.lastPrice)}</p>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+      <nav className="flex border-b border-slate-200 bg-white" role="tablist">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
+            onClick={() => setTab(t.id)}
+            className={`flex-1 border-b-2 px-2 py-2 text-xs font-semibold transition ${
+              tab === t.id ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </nav>
+      <div className="flex-1 overflow-y-auto">
+        {items === null ? null : tab === 'produtos' ? (
+          <ProductsTab items={items} onUpdate={update} />
+        ) : tab === 'acompanhando' ? (
+          <TrackingTab items={items} onUpdate={update} onReload={reload} />
+        ) : (
+          <SettingsPanel inPopup onDataChanged={reload} />
+        )}
+      </div>
     </main>
   );
 }

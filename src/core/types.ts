@@ -44,6 +44,8 @@ export interface Product {
   targetPrice: number | null;
   lastCheckAt: number | null;
   lastCheckError: string | null;
+  /** Último preço que gerou notificação; evita avisar de novo pelo mesmo preço. */
+  alertedPrice: number | null;
 }
 
 export function productKey(store: StoreId, productId: string): string {

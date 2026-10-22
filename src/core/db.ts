@@ -80,6 +80,7 @@ export async function recordSnapshot(snapshot: ProductSnapshot, now = Date.now()
     targetPrice: existing?.targetPrice ?? null,
     lastCheckAt: existing?.lastCheckAt ?? null,
     lastCheckError: existing?.lastCheckError ?? null,
+    alertedPrice: existing?.alertedPrice ?? null,
   };
   await tx.objectStore('products').put(product);
   await tx.done;
@@ -105,6 +106,18 @@ function minOrNull(a: number | null, b: number | null): number | null {
 export async function getHistory(key: string): Promise<PriceRecord[]> {
   const records = await (await db()).getAllFromIndex('prices', 'by-key', key);
   return records.sort((a, b) => a.day.localeCompare(b.day));
+}
+
+/** Histórico de todos os produtos, agrupado por produto (para o popup). */
+export async function getAllHistories(): Promise<Map<string, PriceRecord[]>> {
+  const all = await (await db()).getAll('prices');
+  const map = new Map<string, PriceRecord[]>();
+  for (const r of all.sort((a, b) => a.day.localeCompare(b.day))) {
+    const list = map.get(r.key);
+    if (list) list.push(r);
+    else map.set(r.key, [r]);
+  }
+  return map;
 }
 
 export async function getProduct(key: string): Promise<Product | undefined> {

@@ -12,7 +12,7 @@ export default defineConfig({
     name: 'Preço Real',
     description:
       'Histórico de preços das lojas online brasileiras. Descubra se o desconto é de verdade.',
-    permissions: ['storage'],
+    permissions: ['storage', 'alarms', 'notifications', 'offscreen'],
     host_permissions: HOST_PERMISSIONS,
   },
 });

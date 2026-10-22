@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de Privacidade — Preço Real</title>
+  <style>
+    :root { color-scheme: light dark; --verde: #059669; }
+    body { margin: 0; font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1e293b; background: #f8fafc; }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+    header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    header img { width: 48px; height: 48px; }
+    h1 { margin: 0; font-size: 1.8rem; }
+    h2 { margin-top: 2rem; font-size: 1.2rem; color: var(--verde); }
+    .data { color: #64748b; font-size: .9rem; }
+    .destaque { background: #ecfdf5; border-left: 4px solid var(--verde); padding: 12px 16px; border-radius: 8px; }
+    table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+    code { background: #e2e8f0; padding: 1px 5px; border-radius: 4px; }
+    @media (prefers-color-scheme: dark) {
+      body { background: #0f172a; color: #e2e8f0; }
+      .destaque { background: #052e24; }
+      th, td { border-color: #334155; }
+      code { background: #334155; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon/128.png" alt="">
+    <h1>Política de Privacidade — Preço Real</h1>
+  </header>
+  <p class="data">Última atualização: 22 de outubro de 2026</p>
+
+  <p class="destaque"><strong>Resumo:</strong> o Preço Real não coleta, não vende e não envia seus dados para nenhum
+  servidor. Todo o histórico de preços fica salvo apenas no seu navegador.</p>
+
+  <h2>1. O que a extensão faz</h2>
+  <p>O Preço Real registra o preço dos produtos que <strong>você</strong> abre no Mercado Livre, Amazon Brasil,
+  Magazine Luiza, KaBuM! e Casas Bahia, para mostrar o histórico e indicar se um desconto é verdadeiro.</p>
+
+  <h2>2. Quais dados são guardados</h2>
+  <table>
+    <tr><th>Dado</th><th>Para quê</th><th>Onde fica</th></tr>
+    <tr><td>Nome, foto, endereço (URL) e ID do produto; loja</td><td>Mostrar a lista de produtos vistos</td><td>IndexedDB do navegador</td></tr>
+    <tr><td>Preço, preço "de" e preço no Pix, um registro por dia</td><td>Gráfico e classificação do preço</td><td>IndexedDB do navegador</td></tr>
+    <tr><td>Produtos acompanhados e preço-alvo</td><td>Alertas de queda de preço</td><td>IndexedDB do navegador</td></tr>
+    <tr><td>Configurações (selo, lojas ativas)</td><td>Lembrar suas preferências</td><td><code>chrome.storage.sync</code></td></tr>
+  </table>
+  <p>A extensão <strong>não</strong> lê nem guarda: seu nome, e-mail, login, endereço, dados de pagamento, carrinho,
+  pedidos ou páginas que não sejam de produto das lojas suportadas. Ela não usa cookies próprios, análise de uso
+  (analytics) nem publicidade.</p>
+  <p>As configurações usam <code>chrome.storage.sync</code>. Se a sincronização do Chrome estiver ativa, o próprio
+  Google sincroniza essas preferências entre os seus dispositivos; o histórico de preços nunca é sincronizado.</p>
+
+  <h2>3. Comunicação com a internet</h2>
+  <p>A extensão não tem servidor. A única comunicação de rede é a <strong>verificação automática</strong> dos produtos
+  que você marcou como "Acompanhando": no máximo uma vez a cada 6 horas por produto, a extensão abre a página
+  pública do produto na própria loja para ler o preço atual. Nenhum dado seu é enviado nessa requisição além do
+  que o seu navegador normalmente envia ao abrir a página.</p>
+
+  <h2>4. Permissões pedidas</h2>
+  <table>
+    <tr><th>Permissão</th><th>Por quê</th></tr>
+    <tr><td>Acesso a mercadolivre.com.br, amazon.com.br, magazineluiza.com.br, kabum.com.br e casasbahia.com.br</td><td>Ler o preço nas páginas de produto e fazer a verificação automática. Nenhum outro site é acessado.</td></tr>
+    <tr><td><code>storage</code></td><td>Salvar suas configurações.</td></tr>
+    <tr><td><code>alarms</code></td><td>Agendar a verificação automática de preços.</td></tr>
+    <tr><td><code>notifications</code></td><td>Avisar quando o preço cair abaixo do seu alvo.</td></tr>
+    <tr><td><code>offscreen</code></td><td>Ler o HTML da página baixada na verificação automática.</td></tr>
+  </table>
+
+  <h2>5. Seus controles</h2>
+  <ul>
+    <li><strong>Exportar</strong> todos os dados em JSON, a qualquer momento (Configurações → Exportar JSON).</li>
+    <li><strong>Apagar tudo</strong> com um clique (Configurações → Apagar tudo).</li>
+    <li>Desligar o selo ou lojas específicas.</li>
+    <li>Ao remover a extensão, o Chrome apaga todos os dados dela.</li>
+  </ul>
+
+  <h2>6. Futuro histórico compartilhado</h2>
+  <p>Uma versão futura poderá oferecer um histórico compartilhado entre usuários. Ele será <strong>opcional e
+  desligado por padrão</strong>, e enviará apenas loja, ID do produto, preço e data — nunca dados pessoais ou
+  histórico de navegação. Esta política será atualizada antes de qualquer mudança.</p>
+
+  <h2>7. Contato</h2>
+  <p>Dúvidas ou pedidos: abra uma <em>issue</em> no repositório do projeto no GitHub.</p>
+</main>
+</body>
+</html>
