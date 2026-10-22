@@ -63,3 +63,26 @@ describe('reconhecimento de lojas', () => {
     expect(HOST_PERMISSIONS).toHaveLength(5);
   });
 });
+
+describe('preço no Pix', () => {
+  const page = (body: string) =>
+    new DOMParser().parseFromString(
+      `<h1>Produto</h1><div id="blocoValores"><h4 class="finalPrice">R$ 1.999,00</h4>${body}</div>`,
+      'text/html',
+    );
+  const url = new URL('https://www.kabum.com.br/produto/1/x');
+  const extract = (body: string) => findAdapter(url)!.extract(page(body), url)!;
+
+  it('não confunde a parcela com o preço no Pix', () => {
+    expect(extract('<span>à vista no Pix · ou 10x de R$ 199,90 sem juros</span>').pixPrice).toBeNull();
+  });
+
+  it('lê "Pix: R$" e "R$ ... no Pix"', () => {
+    expect(extract('<span>Pix: R$ 1.899,00</span>').pixPrice).toBe(1899);
+    expect(extract('<span>R$ 1.899,05 no Pix</span>').pixPrice).toBe(1899.05);
+  });
+
+  it('descarta valor implausível', () => {
+    expect(extract('<span>R$ 99,00 no Pix</span>').pixPrice).toBeNull();
+  });
+});

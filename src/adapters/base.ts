@@ -162,7 +162,8 @@ export function readPixPrice(doc: Document, containerSelectors: string[]): numbe
       const text = el.textContent?.replace(/\s+/g, ' ') ?? '';
       const match =
         text.match(/R\$\s*([\d.]+,\d{2})\s*(?:à vista\s*)?(?:no|via|com)\s*(?:o\s*)?pix/i) ??
-        text.match(/pix[^R]{0,30}R\$\s*([\d.]+,\d{2})/i);
+        // "Pix: R$ 99,90" — sem números no meio, para não pegar parcelas ("no Pix ou 10x de R$ 19,90").
+        text.match(/pix[^R\d]{0,20}R\$\s*([\d.]+,\d{2})/i);
       if (match) return parseBRL(match[1]);
     }
   }
@@ -177,6 +178,8 @@ function asArray(value: unknown): unknown[] {
 function clean(text: string): string {
   return text.replace(/\s+/g, ' ').trim();
 }
+
+const PIX_MIN_RATIO = 0.7;
 
 export interface AdapterConfig {
   id: StoreId;
@@ -230,7 +233,8 @@ export function createAdapter(config: AdapterConfig): StoreAdapter {
       let listPrice = ld.listPrice ?? readPrice(doc, selectors.listPrice);
       if (listPrice !== null && listPrice <= price) listPrice = null;
       let pixPrice = selectors.pix ? readPixPrice(doc, selectors.pix) : null;
-      if (pixPrice !== null && pixPrice >= price) pixPrice = null;
+      // Desconto no Pix acima de 30% é improvável: provavelmente lemos outro valor (parcela, frete).
+      if (pixPrice !== null && (pixPrice >= price || pixPrice < price * PIX_MIN_RATIO)) pixPrice = null;
 
       return {
         store: config.id,
