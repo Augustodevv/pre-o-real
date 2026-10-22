@@ -136,7 +136,8 @@ export function readText(doc: Document, selectors: string[]): string | null {
 export function readImage(doc: Document, selectors: string[]): string | null {
   for (const selector of selectors) {
     const img = doc.querySelector<HTMLImageElement>(selector);
-    const src = img?.getAttribute('data-zoom') || img?.getAttribute('src');
+    const src =
+      img?.getAttribute('data-zoom') || img?.getAttribute('data-old-hires') || img?.getAttribute('src');
     if (src && !src.startsWith('data:')) return src;
   }
   return null;
@@ -182,6 +183,8 @@ export interface AdapterConfig {
   name: string;
   hostPattern: RegExp;
   getProductId(url: URL, doc: Document): string | null;
+  /** URL canônica própria da loja. Padrão: <link rel="canonical"> sem parâmetros. */
+  canonical?(url: URL, doc: Document, productId: string): string;
   selectors: {
     name: string[];
     price: string[];
@@ -237,7 +240,7 @@ export function createAdapter(config: AdapterConfig): StoreAdapter {
         listPrice,
         pixPrice,
         imageUrl: ld.image ?? meta.image ?? readImage(doc, selectors.image),
-        url: canonicalUrl(doc, url),
+        url: config.canonical?.(url, doc, productId) ?? canonicalUrl(doc, url),
       };
     },
   };

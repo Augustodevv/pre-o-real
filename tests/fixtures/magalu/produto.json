@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "url": "https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a15-128gb-azul-escuro-4g/p/237645600/te/galx/?seller_id=magazineluiza",
+  "expected": {
+    "store": "magalu",
+    "productId": "237645600",
+    "name": "Smartphone Samsung Galaxy A15 128GB Azul Escuro 4G 4GB RAM 6,5\" Câm. Tripla + Selfie 13MP",
+    "price": 899,
+    "listPrice": 1299,
+    "pixPrice": 854.05,
+    "imageUrl": "https://a-static.mlcdn.com.br/800x560/smartphone-samsung-galaxy-a15/237645600.jpg",
+    "url": "https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a15-128gb-azul-escuro-4g/p/237645600/te/galx/"
+  }
+}

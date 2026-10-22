@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "url": "https://www.casasbahia.com.br/fritadeira-air-fryer-mondial-4l-afn-40-bi/p/55012345?utm_source=gp_search",
+  "expected": {
+    "store": "casasbahia",
+    "productId": "55012345",
+    "name": "Fritadeira Elétrica Air Fryer Mondial AFN-40-BI 4L Preta 127V",
+    "price": 349.9,
+    "listPrice": 499.9,
+    "pixPrice": 332.41,
+    "imageUrl": "https://imgs.casasbahia.com.br/55012345/1g.jpg",
+    "url": "https://www.casasbahia.com.br/fritadeira-air-fryer-mondial-4l-afn-40-bi/p/55012345"
+  }
+}

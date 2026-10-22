@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "url": "https://www.kabum.com.br/produto/475647/placa-de-video-rtx-4060-ventus-2x-black-oc-msi?utm_source=google",
+  "expected": {
+    "store": "kabum",
+    "productId": "475647",
+    "name": "Placa de Vídeo RTX 4060 Ventus 2X Black OC MSI NVIDIA GeForce, 8GB GDDR6, DLSS, Ray Tracing",
+    "price": 1899.99,
+    "listPrice": 2399.99,
+    "pixPrice": null,
+    "imageUrl": "https://images.kabum.com.br/produtos/fotos/475647/placa-de-video-msi_1689600000_gg.jpg",
+    "url": "https://www.kabum.com.br/produto/475647/placa-de-video-rtx-4060-ventus-2x-black-oc-msi"
+  }
+}

@@ -20,7 +20,7 @@ export default function App() {
       </header>
       {products === null ? null : products.length === 0 ? (
         <p className="p-6 text-center text-sm text-slate-500">
-          Nenhum produto ainda. Abra um produto no Mercado Livre para começar.
+          Nenhum produto ainda. Abra um produto no Mercado Livre, Amazon, Magalu, KaBuM! ou Casas Bahia para começar.
         </p>
       ) : (
         <ul className="divide-y divide-slate-100">

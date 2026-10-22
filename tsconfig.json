@@ -4,5 +4,10 @@
     "jsx": "react-jsx",
     "strict": true,
     "noUncheckedIndexedAccess": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    ".output",
+    "marmifit-camburi"
+  ]
 }
