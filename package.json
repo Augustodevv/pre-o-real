@@ -2,7 +2,7 @@
   "name": "preco-real",
   "description": "Histórico de preços e detector de descontos falsos para lojas online brasileiras.",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "postinstall": "wxt prepare",
-    "e2e": "wxt build && node scripts/e2e.mjs"
+    "e2e": "wxt build && node scripts/e2e.mjs",
+    "assets": "wxt build && node scripts/store-assets.mjs"
   },
   "dependencies": {
     "chart.js": "^4.6.1",
@@ -33,5 +34,6 @@
     "typescript": "^7.0.2",
     "vitest": "^5.0.5",
     "wxt": "^0.21.4"
-  }
+  },
+  "license": "MIT"
 }
