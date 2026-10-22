@@ -1,0 +1,13 @@
+{
+  "synthetic": true,
+  "url": "https://produto.mercadolivre.com.br/MLB-3759516703-basike-fone-de-ouvido-sem-fio-bluetooth-ows-corrida-ciclismo-_JM?searchVariation=123",
+  "expected": {
+    "productId": "MLB3759516703",
+    "name": "Basike Fone De Ouvido Sem Fio Bluetooth Ows Corrida Ciclismo",
+    "price": 1300.03,
+    "listPrice": null,
+    "pixPrice": 1235.03,
+    "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_basike-O.webp",
+    "url": "https://produto.mercadolivre.com.br/MLB-3759516703-basike-fone-de-ouvido-sem-fio-bluetooth-ows-corrida-ciclismo-_JM"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "url": "https://www.mercadolivre.com.br/fone-de-ouvido-bluetooth-pro-4-branco/p/MLB25263382?pdp_filters=item_id%3AMLB123#reco",
+  "expected": {
+    "store": "mercadolivre",
+    "productId": "MLB25263382",
+    "name": "Fone De Ouvido Bluetooth Bateria de Longa Duração Pro 4 Branco",
+    "price": 89.9,
+    "listPrice": 149.9,
+    "pixPrice": null,
+    "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_fone-pro4-F.webp",
+    "url": "https://www.mercadolivre.com.br/fone-de-ouvido-bluetooth-pro-4-branco/p/MLB25263382"
+  }
+}
