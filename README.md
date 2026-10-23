@@ -103,6 +103,14 @@ flowchart LR
 
 ## Instalação
 
+### Baixando a versão pronta (mais fácil)
+
+1. Baixe o **[preco-real-chrome.zip](https://github.com/Augustodevv/pre-o-real/releases/latest/download/preco-real-chrome.zip)** (última versão, em [Releases](https://github.com/Augustodevv/pre-o-real/releases)) e descompacte numa pasta.
+2. Abra `chrome://extensions` (no Edge: `edge://extensions`) e ative o **Modo do desenvolvedor**.
+3. Clique em **Carregar sem compactação** e selecione a pasta descompactada.
+
+Funciona no Chrome, Edge, Brave e Opera.
+
 ### Pelo código-fonte
 
 Requisitos: Node 20+ e pnpm.

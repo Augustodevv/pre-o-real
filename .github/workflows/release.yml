@@ -1,0 +1,43 @@
+# Ao criar uma tag v*, compila a extensão, roda os testes e publica o .zip numa Release.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm compile
+      - run: pnpm test
+      - run: pnpm zip
+      - name: Nome fixo para o link "Baixar" do site
+        run: cp .output/preco-real-*-chrome.zip preco-real-chrome.zip
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: preco-real-chrome.zip
+          generate_release_notes: false
+          body: |
+            ## Como instalar (Chrome, Edge, Brave, Opera)
+
+            1. Baixe **preco-real-chrome.zip** abaixo e descompacte numa pasta.
+            2. Abra `chrome://extensions` (no Edge: `edge://extensions`).
+            3. Ative o **Modo do desenvolvedor**.
+            4. Clique em **Carregar sem compactação** e selecione a pasta descompactada.
+
+            Funciona no Mercado Livre, Amazon, Magazine Luiza, KaBuM! e Casas Bahia.
+            [Política de privacidade](https://augustodevv.github.io/pre-o-real/privacidade.html)
