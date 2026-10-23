@@ -29,11 +29,12 @@ Stack: TypeScript, React, WXT (Manifest V3), Tailwind, Chart.js, IndexedDB, Vite
 
 O próximo passo é um histórico compartilhado opcional e anônimo, para o gráfico já aparecer preenchido desde a primeira visita.
 
-O código é aberto. O link está nos comentários 👇
+Dá para instalar de graça agora mesmo, e o código é aberto. Os links estão nos comentários 👇
 
 #desenvolvimentoweb #typescript #react #extensaochrome #opensource #javascript #programacao
 
 ---
 
 **Primeiro comentário:**
-Código no GitHub: https://github.com/Augustodevv/pre-o-real
+🔗 Baixar e instalar: https://augustodevv.github.io/pre-o-real/
+💻 Código no GitHub: https://github.com/Augustodevv/pre-o-real
