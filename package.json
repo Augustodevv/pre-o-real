@@ -2,7 +2,7 @@
   "name": "preco-real",
   "description": "Histórico de preços e detector de descontos falsos para lojas online brasileiras.",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",

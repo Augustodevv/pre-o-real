@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ADAPTERS, findAdapter } from '../../src/adapters';
 import { amazonProductId } from '../../src/adapters/amazon';
@@ -84,5 +86,34 @@ describe('preço no Pix', () => {
 
   it('descarta valor implausível', () => {
     expect(extract('<span>R$ 99,00 no Pix</span>').pixPrice).toBeNull();
+  });
+});
+
+describe('produto indisponível', () => {
+  const url = new URL('https://www.kabum.com.br/produto/1/x');
+  const ld = `<script type="application/ld+json">{"@type":"Product","name":"X","offers":{"price":"100.00","availability":"InStock"}}</script>`;
+  const extract = (body: string) =>
+    findAdapter(url)!.extract(new DOMParser().parseFromString(`${ld}<h1>X</h1>${body}`, 'text/html'), url);
+
+  it('ignora a página com aviso de indisponível, mesmo com JSON-LD em estoque', () => {
+    expect(extract('<p class="x">Produto <br> indisponível</p>')).toBeNull();
+    expect(extract('<span>Produto Esgotado</span>')).toBeNull();
+  });
+
+  it('não confunde com comentários que usam a palavra', () => {
+    expect(extract('<p>Comprei quando estava indisponível em outra loja, chegou rápido.</p>')?.price).toBe(100);
+  });
+});
+
+describe('âncora do selo nas páginas reais', () => {
+  it.each([
+    ['kabum/real-2026-10-mouse-g203', 'https://www.kabum.com.br/produto/112948/x', 'number-flow-react'],
+    ['amazon/real-2026-10-echo-dot', 'https://www.amazon.com.br/dp/B09B8VGCR8', 'R$'],
+    ['magalu/real-2026-10-air-fryer', 'https://www.magazineluiza.com.br/x/p/228887000/ep/efso/', '249'],
+    ['casasbahia/real-2026-10-air-fryer', 'https://www.casasbahia.com.br/x/p/55032021', '269,09'],
+  ])('%s', (fixture, href, contains) => {
+    const html = readFileSync(join(__dirname, `../fixtures/${fixture}.html`), 'utf8');
+    const anchor = findAdapter(new URL(href))!.findPriceElement(new DOMParser().parseFromString(html, 'text/html'));
+    expect(anchor?.outerHTML).toContain(contains);
   });
 });

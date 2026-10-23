@@ -18,6 +18,8 @@ export const magalu = createAdapter({
     name: ['h1[data-testid="heading-product-title"]', 'h1'],
     price: ['[data-testid="price-value"]', '[data-testid="price-default"]'],
     listPrice: ['[data-testid="price-original"]'],
+    // Em 10/2026 a Magalu risca o preço no cartão quando há desconto no Pix.
+    cardTotal: ['[data-testid="price-installment"]'],
     image: ['img[data-testid="image-selected-thumbnail"]', '[data-testid="media-gallery-image"]'],
     pix: ['[data-testid="price-container"]', '[data-testid="mod-productprice"]'],
     badgeAnchor: ['[data-testid="price-value"]'],

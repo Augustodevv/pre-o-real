@@ -11,12 +11,14 @@ export const kabum = createAdapter({
   name: 'KaBuM!',
   hostPattern: /(^|\.)kabum\.com\.br$/,
   getProductId: (url) => kabumProductId(url),
+  // Layout de 2026 (Tailwind, sem classes com nome): o preço fica num <number-flow-react>
+  // e o preço "de" num span "line-through". Os seletores antigos ficam como alternativa.
   selectors: {
     name: ['h1'],
-    price: ['h4.finalPrice', '.finalPrice', 'b.regularPrice'],
-    listPrice: ['.oldPrice'],
+    price: ['number-flow-react', 'h4.finalPrice', '.finalPrice', 'b.regularPrice'],
+    listPrice: ['span.line-through', '.oldPrice'],
     image: ['img.iiz__img', '#carouselDetails img'],
     pix: ['#blocoValores', '[class*="priceCard"]'],
-    badgeAnchor: ['h4.finalPrice', '.finalPrice'],
+    badgeAnchor: ['p:has(> number-flow-react)', 'number-flow-react', 'h4.finalPrice', '.finalPrice'],
   },
 });

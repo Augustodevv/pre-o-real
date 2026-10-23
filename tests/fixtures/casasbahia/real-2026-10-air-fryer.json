@@ -1,0 +1,12 @@
+{
+  "real": "Página real capturada em 23/10/2026. Preço R$ 269,09 no Pix, preço \"de\" R$ 343,10 (data-testid=\"history-price\").",
+  "url": "https://www.casasbahia.com.br/fritadeira-eletrica-sem-oleo-air-fryer-mondial-afn40bi-family-inox-4l-preta-inox/p/55032021",
+  "expected": {
+    "store": "casasbahia",
+    "productId": "55032021",
+    "name": "Fritadeira Elétrica Sem Óleo Air Fryer Mondial AFN40BI Family Inox 4L Preta/Inox - 110V",
+    "price": 269.09,
+    "listPrice": 343.1,
+    "url": "https://www.casasbahia.com.br/fritadeira-eletrica-sem-oleo-air-fryer-mondial-afn40bi-family-inox-4l-preta-inox/p/55032021"
+  }
+}

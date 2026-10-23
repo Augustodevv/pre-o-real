@@ -1,14 +1,14 @@
 {
   "synthetic": true,
-  "url": "https://www.amazon.com.br/Echo-Dot-5%C2%AA-gera%C3%A7%C3%A3o-Cor-Preta/dp/B09B8VGCR8/ref=sr_1_1?crid=ABC&keywords=echo+dot&qid=1&sr=8-1",
+  "url": "https://www.amazon.com.br/Echo-Dot-5%C2%AA-gera%C3%A7%C3%A3o-Cor-Preta/dp/B0SINTET01/ref=sr_1_1?crid=ABC&keywords=echo+dot&qid=1&sr=8-1",
   "expected": {
     "store": "amazon",
-    "productId": "B09B8VGCR8",
+    "productId": "B0SINTET01",
     "name": "Echo Dot 5ª geração | Smart speaker com Alexa | Cor Preta",
     "price": 299,
     "listPrice": 429,
     "pixPrice": null,
     "imageUrl": "https://m.media-amazon.com/images/I/71xoR4A6q-L._AC_SL1000_.jpg",
-    "url": "https://www.amazon.com.br/dp/B09B8VGCR8"
+    "url": "https://www.amazon.com.br/dp/B0SINTET01"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "real": "Página real capturada em 23/10/2026 (reduzida com scripts/limpar-fixture.mjs).",
+  "url": "https://www.kabum.com.br/produto/112948/mouse-gamer-logitech-g203-lightsync-rgb-efeito-de-ondas-de-cores-6-botoes-programaveis-e-ate-8-000-dpi-preto-910-005793",
+  "expected": {
+    "store": "kabum",
+    "productId": "112948",
+    "name": "Mouse Gamer Logitech G203 LIGHTSYNC RGB, Efeito de Ondas de Cores, 6 Botões Programáveis e Até 8.000 DPI, Preto - 910-005793",
+    "price": 119.99,
+    "listPrice": 199.99,
+    "pixPrice": null
+  }
+}

@@ -115,6 +115,15 @@ export function readPrice(doc: Document | Element, selectors: string[]): number 
  * em elementos separados), atributos `content`/`aria-label` e texto simples.
  */
 export function readMoneyElement(el: Element): number | null {
+  // Componente de número animado (<number-flow-react>, usado pela KaBuM): o texto visível
+  // tem todos os dígitos da animação; o valor certo fica no atributo "data".
+  if (el.tagName === 'NUMBER-FLOW-REACT') {
+    try {
+      return parseStructuredPrice((JSON.parse(el.getAttribute('data') ?? '{}') as { value?: unknown }).value);
+    } catch {
+      return null;
+    }
+  }
   const fraction = el.querySelector('[class*="money-amount__fraction"]');
   if (fraction) {
     const cents = el.querySelector('[class*="money-amount__cents"]')?.textContent?.trim() ?? '00';
@@ -170,6 +179,23 @@ export function readPixPrice(doc: Document, containerSelectors: string[]): numbe
   return null;
 }
 
+const UNAVAILABLE = /^(?:este\s+)?produto\s+(?:est[aá]\s+)?(?:indispon[ií]vel|esgotado)\.?$/i;
+
+/**
+ * A página mostra um aviso de produto indisponível/esgotado? Algumas lojas mantêm o
+ * JSON-LD "InStock" com o último preço mesmo assim (visto na Magazine Luiza em 10/2026).
+ * Só conta um elemento curto cujo texto inteiro é o aviso, para não confundir com
+ * comentários de clientes que usem a palavra.
+ */
+export function hasUnavailableNotice(doc: Document): boolean {
+  for (const el of doc.querySelectorAll('p, span, h2, h3, h4, strong, b, div')) {
+    const text = el.textContent;
+    if (!text || text.length > 60) continue;
+    if (UNAVAILABLE.test(text.replace(/\s+/g, ' ').trim())) return true;
+  }
+  return false;
+}
+
 function asArray(value: unknown): unknown[] {
   if (value === undefined || value === null) return [];
   return Array.isArray(value) ? value : [value];
@@ -195,6 +221,11 @@ export interface AdapterConfig {
     image: string[];
     /** Onde procurar o texto "no Pix". */
     pix?: string[];
+    /**
+     * Total a prazo no cartão (ex.: "ou R$ 262,11 em 6x"). Algumas lojas riscam esse valor
+     * como se fosse o preço "de", quando na verdade é só a diferença do desconto no Pix.
+     */
+    cardTotal?: string[];
     /** Onde ancorar o selo. Padrão: os seletores de preço. Prefira a linha inteira do preço. */
     badgeAnchor?: string[];
   };
@@ -221,6 +252,7 @@ export function createAdapter(config: AdapterConfig): StoreAdapter {
     extract(doc, url) {
       const productId = config.getProductId(url, doc);
       if (!productId) return null;
+      if (hasUnavailableNotice(doc)) return null;
       const ld = readJsonLd(doc);
       const meta = readMeta(doc);
       const { selectors } = config;
@@ -232,6 +264,9 @@ export function createAdapter(config: AdapterConfig): StoreAdapter {
 
       let listPrice = ld.listPrice ?? readPrice(doc, selectors.listPrice);
       if (listPrice !== null && listPrice <= price) listPrice = null;
+      // O "de" riscado igual ao total no cartão não é preço antigo, é o preço a prazo.
+      const cardTotal = selectors.cardTotal ? readPrice(doc, selectors.cardTotal) : null;
+      if (listPrice !== null && cardTotal !== null && Math.abs(listPrice - cardTotal) < 0.02) listPrice = null;
       let pixPrice = selectors.pix ? readPixPrice(doc, selectors.pix) : null;
       // Desconto no Pix acima de 30% é improvável: provavelmente lemos outro valor (parcela, frete).
       if (pixPrice !== null && (pixPrice >= price || pixPrice < price * PIX_MIN_RATIO)) pixPrice = null;

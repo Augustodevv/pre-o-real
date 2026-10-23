@@ -11,7 +11,7 @@ Mercado Livre · Amazon Brasil · Magazine Luiza · KaBuM! · Casas Bahia
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![Testes](https://img.shields.io/badge/testes-96%20%2B%20E2E-059669)
+![Testes](https://img.shields.io/badge/testes-107%20%2B%20E2E-059669)
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-informational)
 
 <img src="store-assets/1-desconto-suspeito.png" alt="Painel do Preço Real mostrando um desconto suspeito em uma página de produto" width="820">
@@ -87,9 +87,12 @@ flowchart LR
 
 ### Testes
 
-- **96 testes** (Vitest + jsdom + fake-indexeddb): leitura de preços, classificação, armazenamento, exportação e importação, verificador de alertas, posicionamento do selo, painel, histórico compartilhado e um teste por loja.
+- **107 testes** (Vitest + jsdom + fake-indexeddb): leitura de preços, classificação, armazenamento, exportação e importação, verificador de alertas, posicionamento do selo, painel, histórico compartilhado e um teste por loja.
 - **O SQL do Supabase é testado de verdade** num Postgres em memória ([PGlite](https://pglite.dev)): envio, mediana, validações, rejeição de preços absurdos, limite de envios e bloqueio de acesso direto às tabelas.
-- **Fixtures de páginas** em `tests/fixtures/<loja>/`, cada uma com um `.json` do resultado esperado. Quando uma loja muda o layout, o teste da fixture falha. Para adicionar uma página real, salve-a com Ctrl+S e veja `tests/fixtures/README.md`.
+- **Fixtures de páginas** em `tests/fixtures/<loja>/`, cada uma com um `.json` do resultado esperado. Quando uma loja muda o layout, o teste da fixture falha. Inclui **páginas reais** da Amazon, KaBuM!, Magazine Luiza e Casas Bahia (10/2026). Elas revelaram três armadilhas, todas tratadas no código e descritas em [`tests/fixtures/README.md`](tests/fixtures/README.md):
+  - o preço animado da KaBuM!;
+  - o "de" falso da Magalu, que na verdade é o total no cartão;
+  - produto indisponível que continua "em estoque" no JSON-LD.
 - **Ponta a ponta** (`pnpm e2e`, Playwright): carrega a extensão compilada no Chromium, abre as fixtures nos domínios reais (com as requisições interceptadas), confere o IndexedDB, clica no selo, executa a verificação automática e confere a notificação. O `pnpm e2e:community` confere que nada é enviado com a opção desligada e que, ligada, só loja, ID, preço e instalação saem do navegador.
 
 ## Tecnologias

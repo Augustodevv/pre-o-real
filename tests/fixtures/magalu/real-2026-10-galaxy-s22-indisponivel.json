@@ -1,0 +1,5 @@
+{
+  "real": "Página real capturada em 23/10/2026. Mostra \"Produto indisponível\", mas o JSON-LD continua \"InStock\" com R$ 6.999,00: a extensão não deve registrar preço.",
+  "url": "https://www.magazineluiza.com.br/smartphone-samsung-galaxy-s22-128gb-branco-5g-8gb/p/234439600/te/s22m/",
+  "expected": null
+}

@@ -14,7 +14,13 @@ export const casasBahia = createAdapter({
   selectors: {
     name: ['h1[data-testid="product-title"]', 'h1'],
     price: ['[data-testid="product-price-value"]', '#product-price', '.product-price-value'],
-    listPrice: ['[data-testid="product-original-price"]', '#product-original-price', '.product-original-price'],
+    // Em 10/2026 o preço "de" aparece como "de R$ X" em data-testid="history-price".
+    listPrice: [
+      '[data-testid="history-price"]',
+      '[data-testid="product-original-price"]',
+      '#product-original-price',
+      '.product-original-price',
+    ],
     image: ['[data-testid="product-image"] img', '.product-image img'],
     pix: ['[data-testid="product-price"]', '#product-price-container', '.product-price'],
     badgeAnchor: ['[data-testid="product-price-value"]', '#product-price'],

@@ -1,0 +1,11 @@
+{
+  "real": "Página real capturada em 23/10/2026 (reduzida com scripts/limpar-fixture.mjs). Sem preço riscado na oferta: o R$ 899,00 da página é de um quadro comparativo e deve ser ignorado.",
+  "url": "https://www.amazon.com.br/Echo-Dot-5%C2%AA-gera%C3%A7%C3%A3o-Cor-Preta/dp/B09B8VGCR8",
+  "expected": {
+    "store": "amazon",
+    "productId": "B09B8VGCR8",
+    "price": 649,
+    "listPrice": null,
+    "url": "https://www.amazon.com.br/dp/B09B8VGCR8"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "real": "Página real capturada em 23/10/2026. Preço R$ 249,00 no Pix; o \"De R$ 262,11\" riscado é o total no cartão (6x), então não conta como preço \"de\".",
+  "url": "https://www.magazineluiza.com.br/air-fryer-mondial-family-afn-40-bi-preto-e-inox-4l-com-timer/p/228887000/ep/efso/",
+  "expected": {
+    "store": "magalu",
+    "productId": "228887000",
+    "name": "Air Fryer Mondial Family AFN-40-BI Preto e Inox 4L com Timer",
+    "price": 249,
+    "listPrice": null
+  }
+}
