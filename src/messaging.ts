@@ -20,6 +20,10 @@ export interface ProductView {
   product: Product;
   history: PriceRecord[];
   verdict: Verdict;
+  /** Dias do histórico que vieram do histórico compartilhado. */
+  communityDays: number;
+  /** O usuário participa do histórico compartilhado. */
+  sharing: boolean;
 }
 
 export type Response<M extends Message | ParseHtmlMessage> = M extends { type: 'capture' | 'getProductView' }

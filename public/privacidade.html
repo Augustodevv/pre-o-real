@@ -31,10 +31,11 @@
     <img src="icon/128.png" alt="">
     <h1>Política de Privacidade — Preço Real</h1>
   </header>
-  <p class="data">Última atualização: 22 de outubro de 2026</p>
+  <p class="data">Última atualização: 23 de outubro de 2026</p>
 
-  <p class="destaque"><strong>Resumo:</strong> o Preço Real não coleta, não vende e não envia seus dados para nenhum
-  servidor. Todo o histórico de preços fica salvo apenas no seu navegador.</p>
+  <p class="destaque"><strong>Resumo:</strong> o Preço Real não coleta nem vende dados pessoais. Seu histórico de
+  preços fica salvo apenas no seu navegador. Se você ligar o histórico compartilhado (opcional), só loja, ID do
+  produto e preço são enviados, de forma anônima.</p>
 
   <h2>1. O que a extensão faz</h2>
   <p>O Preço Real registra o preço dos produtos que <strong>você</strong> abre no Mercado Livre, Amazon Brasil,
@@ -55,7 +56,7 @@
   Google sincroniza essas preferências entre os seus dispositivos; o histórico de preços nunca é sincronizado.</p>
 
   <h2>3. Comunicação com a internet</h2>
-  <p>A extensão não tem servidor. A única comunicação de rede é a <strong>verificação automática</strong> dos produtos
+  <p>Por padrão, a única comunicação de rede é a <strong>verificação automática</strong> dos produtos
   que você marcou como "Acompanhando": no máximo uma vez a cada 6 horas por produto, a extensão abre a página
   pública do produto na própria loja para ler o preço atual. Nenhum dado seu é enviado nessa requisição além do
   que o seu navegador normalmente envia ao abrir a página.</p>
@@ -78,10 +79,21 @@
     <li>Ao remover a extensão, o Chrome apaga todos os dados dela.</li>
   </ul>
 
-  <h2>6. Futuro histórico compartilhado</h2>
-  <p>Uma versão futura poderá oferecer um histórico compartilhado entre usuários. Ele será <strong>opcional e
-  desligado por padrão</strong>, e enviará apenas loja, ID do produto, preço e data — nunca dados pessoais ou
-  histórico de navegação. Esta política será atualizada antes de qualquer mudança.</p>
+  <h2>6. Histórico compartilhado (opcional)</h2>
+  <p>Nas configurações há a opção <strong>"Participar do histórico compartilhado"</strong>, que vem
+  <strong>desligada</strong>. Só se você ligá-la:</p>
+  <ul>
+    <li>Quando você abre um produto (ou a verificação automática o consulta), a extensão envia ao servidor do
+    projeto (Supabase) <strong>apenas</strong>: a loja, o ID do produto (ex.: <code>MLB25263382</code>), o preço e
+    um identificador aleatório desta instalação. A data é definida pelo servidor.</li>
+    <li>O identificador aleatório serve só para limitar a quantidade de envios e evitar dados falsos. Ele não tem
+    relação com você, e o servidor guarda apenas um <em>hash</em> dele.</li>
+    <li>Nunca são enviados: nome do produto, URL, seu IP associado aos dados, cookies, e-mail, contas, histórico de
+    navegação ou qualquer outra página.</li>
+    <li>Em troca, a extensão consulta o histórico agregado (mediana diária de todos os participantes) do produto
+    aberto, para o gráfico já aparecer preenchido.</li>
+    <li>Você pode desligar a opção a qualquer momento; a extensão para de enviar e de consultar na hora.</li>
+  </ul>
 
   <h2>7. Contato</h2>
   <p>Dúvidas ou pedidos: abra uma <em>issue</em> no repositório do projeto no GitHub.</p>

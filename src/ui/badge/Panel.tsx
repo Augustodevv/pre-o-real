@@ -52,6 +52,12 @@ export function Panel({ view, onClose }: Props) {
         </div>
 
         <PriceChart history={history} average={stats?.average30 ?? null} />
+        {view.communityDays > 0 && (
+          <p className="panel__note">
+            ○ {view.communityDays} {view.communityDays === 1 ? 'dia veio' : 'dias vieram'} do histórico compartilhado
+            (pontos vazados no gráfico).
+          </p>
+        )}
 
         {stats && (
           <dl className="stats">
@@ -78,7 +84,11 @@ export function Panel({ view, onClose }: Props) {
         )}
       </div>
 
-      <footer className="panel__footer">🔒 Histórico salvo apenas no seu navegador.</footer>
+      <footer className="panel__footer">
+        {view.sharing
+          ? '🤝 Você participa do histórico compartilhado (anônimo).'
+          : '🔒 Histórico salvo apenas no seu navegador.'}
+      </footer>
     </div>
   );
 }

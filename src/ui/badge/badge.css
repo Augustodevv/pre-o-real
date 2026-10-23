@@ -97,6 +97,8 @@ button { font: inherit; cursor: pointer; }
 .stats dd { margin: 2px 0 0; font-weight: 700; }
 .stats small { font-size: 11px; color: #64748b; }
 
+.panel__note { margin: -4px 0 0; font-size: 11px; color: #64748b; }
+
 .panel__footer {
   padding: 8px 14px 12px;
   font-size: 11px;

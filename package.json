@@ -2,7 +2,7 @@
   "name": "preco-real",
   "description": "Histórico de preços e detector de descontos falsos para lojas online brasileiras.",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "postinstall": "wxt prepare",
     "e2e": "wxt build && node scripts/e2e.mjs",
-    "assets": "wxt build && node scripts/store-assets.mjs"
+    "assets": "wxt build && node scripts/store-assets.mjs",
+    "e2e:community": "WXT_SUPABASE_URL=https://teste123.supabase.co WXT_SUPABASE_KEY=sb_publishable_teste_1234567890123456 wxt build && node scripts/e2e-community.mjs; wxt build >/dev/null"
   },
   "dependencies": {
     "chart.js": "^4.6.1",
@@ -22,6 +23,7 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",

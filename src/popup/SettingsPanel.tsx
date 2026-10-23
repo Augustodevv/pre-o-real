@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { browser } from 'wxt/browser';
 import { ADAPTERS } from '../adapters';
+import { isCommunityConfigured } from '../community/config';
 import { clearAll, exportAll, importAll } from '../core/db';
 import { dayKey } from '../core/dates';
 import { DEFAULT_SETTINGS, getSettings, settingsItem, type Settings } from '../settings';
@@ -97,6 +98,21 @@ export function SettingsPanel({ inPopup, onDataChanged }: Props) {
       </section>
 
       <section>
+        <h2 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Histórico compartilhado</h2>
+        <Toggle
+          label="Participar do histórico compartilhado"
+          description={
+            isCommunityConfigured()
+              ? 'O gráfico já aparece preenchido com os preços vistos por outros usuários. Em troca, enviamos de forma anônima apenas loja, ID do produto, preço e data — nunca seus dados ou seu histórico de navegação.'
+              : 'Indisponível nesta versão da extensão.'
+          }
+          checked={settings.shareHistory && isCommunityConfigured()}
+          disabled={!isCommunityConfigured()}
+          onChange={(shareHistory) => save({ ...settings, shareHistory })}
+        />
+      </section>
+
+      <section>
         <h2 className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Seus dados</h2>
         <div className="flex flex-wrap gap-2">
           <Button onClick={exportData}>Exportar JSON</Button>
@@ -126,7 +142,10 @@ export function SettingsPanel({ inPopup, onDataChanged }: Props) {
       </section>
 
       <section className="rounded-lg bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
-        🔒 Seu histórico fica guardado <strong>somente neste navegador</strong>. Nada é enviado para servidores.{' '}
+        🔒 Seu histórico fica guardado <strong>somente neste navegador</strong>.{' '}
+        {settings.shareHistory
+          ? 'Como você participa do histórico compartilhado, só loja, ID do produto, preço e data são enviados, de forma anônima.'
+          : 'Nada é enviado para servidores.'}{' '}
         <a
           href={browser.runtime.getURL('/privacidade.html')}
           target="_blank"
@@ -145,15 +164,19 @@ function Toggle({
   label,
   description,
   checked,
+  disabled,
   onChange,
 }: {
   label: string;
   description?: string;
   checked: boolean;
+  disabled?: boolean;
   onChange(value: boolean): void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-3 py-2">
+    <label
+      className={`flex items-center justify-between gap-3 py-2 ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+    >
       <span>
         <span className="font-medium text-slate-800">{label}</span>
         {description && <span className="block text-xs text-slate-500">{description}</span>}
@@ -162,6 +185,7 @@ function Toggle({
         type="checkbox"
         role="switch"
         checked={checked}
+        disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
         className="peer sr-only"
       />

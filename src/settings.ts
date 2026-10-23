@@ -6,11 +6,14 @@ export interface Settings {
   showBadge: boolean;
   /** Lojas ativas. */
   stores: Record<StoreId, boolean>;
+  /** Participar do histórico compartilhado (opcional, desligado por padrão). */
+  shareHistory: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   showBadge: true,
   stores: { mercadolivre: true, amazon: true, magalu: true, kabum: true, casasbahia: true },
+  shareHistory: false,
 };
 
 export const settingsItem = storage.defineItem<Settings>('sync:settings', {

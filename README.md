@@ -11,7 +11,7 @@ Mercado Livre · Amazon Brasil · Magazine Luiza · KaBuM! · Casas Bahia
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![Testes](https://img.shields.io/badge/testes-77%20unit%C3%A1rios%20%2B%20E2E-059669)
+![Testes](https://img.shields.io/badge/testes-95%20%2B%20E2E-059669)
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-informational)
 
 <img src="store-assets/1-desconto-suspeito.png" alt="Painel do Preço Real mostrando um desconto suspeito em uma página de produto" width="820">
@@ -41,7 +41,8 @@ O **Preço Real** guarda o preço de cada produto que você visita, um registro 
 - **Acompanhando**: marque um produto, defina o preço-alvo e receba uma **notificação do Chrome** quando o preço cair abaixo dele.
 - **Verificação automática** com `chrome.alarms`: no máximo 1 vez a cada 6 horas por produto, um de cada vez e com pausa entre as consultas. Se uma verificação falha, ela é registrada e tentada de novo na próxima janela, sem travar o resto.
 - **Configurações**: ligar e desligar o selo e cada loja, exportar e importar em JSON, apagar tudo.
-- **Privacidade**: nada sai do navegador. Não há servidor, cadastro ou analytics, e as permissões se limitam aos 5 domínios das lojas.
+- **Histórico compartilhado (opcional, desligado por padrão)**: quem participa envia, de forma anônima, só loja, ID do produto e preço, e recebe o histórico de todos os participantes. Assim o gráfico e a classificação aparecem já na primeira visita. Os dias vindos da comunidade aparecem como pontos vazados no gráfico.
+- **Privacidade**: por padrão, nada sai do navegador. Não há cadastro nem analytics, e as permissões se limitam aos 5 domínios das lojas.
 
 <table>
   <tr>
@@ -70,6 +71,7 @@ flowchart LR
   BG -- "fetch da página" --> OFF[Documento offscreen<br/>DOMParser + adaptador]
   BG --> NOT[Notificação]
   POP[Popup / Opções] --> DB
+  BG -. "opcional: preço anônimo" .-> SB[(Supabase<br/>submit_price /<br/>get_price_history)]
 ```
 
 ### Decisões técnicas
@@ -80,17 +82,19 @@ flowchart LR
 - **O selo não quebra o layout**: fica num Shadow DOM fechado, posicionado sobre a página. O conteúdo da linha do preço é medido com `Range` para o selo ficar logo depois do texto, sem cobrir nada.
 - **Verificação em segundo plano sem DOM**: o service worker do MV3 não tem `DOMParser`. O HTML baixado vai para um documento *offscreen*, que roda **os mesmos adaptadores** usados na página.
 - **Regras de classificação puras e testadas** (`src/core/classify.ts`), com os limites em constantes fáceis de ajustar.
+- **Histórico compartilhado seguro por padrão**: as tabelas no Supabase ficam fechadas (RLS sem políticas) e o público só chama duas funções. O servidor valida loja, ID e faixa de preço, rejeita valores 5× fora da mediana, limita 300 envios por instalação por dia e guarda só o hash do ID aleatório da instalação. O histórico usa a mediana diária, o que dilui dados falsos. A extensão fala direto com a API REST (PostgREST), sem a biblioteca `supabase-js`. Detalhes em [`supabase/README.md`](supabase/README.md).
 - **Formatação brasileira em todo lugar**: `R$ 1.234,56`, datas `dd/mm/aaaa` e interpretação de preços como "1.299", "R$ 1.299,90" ou "1299.90" (JSON-LD).
 
 ### Testes
 
-- **77 testes unitários** (Vitest + jsdom + fake-indexeddb): leitura de preços, classificação, armazenamento, exportação e importação, verificador de alertas, posicionamento do selo, painel e um teste por loja.
+- **95 testes** (Vitest + jsdom + fake-indexeddb): leitura de preços, classificação, armazenamento, exportação e importação, verificador de alertas, posicionamento do selo, painel, histórico compartilhado e um teste por loja.
+- **O SQL do Supabase é testado de verdade** num Postgres em memória ([PGlite](https://pglite.dev)): envio, mediana, validações, rejeição de preços absurdos, limite de envios e bloqueio de acesso direto às tabelas.
 - **Fixtures de páginas** em `tests/fixtures/<loja>/`, cada uma com um `.json` do resultado esperado. Quando uma loja muda o layout, o teste da fixture falha. Para adicionar uma página real, salve-a com Ctrl+S e veja `tests/fixtures/README.md`.
-- **Ponta a ponta** (`pnpm e2e`, Playwright): carrega a extensão compilada no Chromium, abre as fixtures nos domínios reais (com as requisições interceptadas), confere o IndexedDB, clica no selo, executa a verificação automática e confere a notificação.
+- **Ponta a ponta** (`pnpm e2e`, Playwright): carrega a extensão compilada no Chromium, abre as fixtures nos domínios reais (com as requisições interceptadas), confere o IndexedDB, clica no selo, executa a verificação automática e confere a notificação. O `pnpm e2e:community` confere que nada é enviado com a opção desligada e que, ligada, só loja, ID, preço e instalação saem do navegador.
 
 ## Tecnologias
 
-[WXT](https://wxt.dev) · Manifest V3 · TypeScript (strict) · React 19 · Tailwind CSS 4 · Chart.js · idb (IndexedDB) · chrome.storage · Vitest · Playwright
+[WXT](https://wxt.dev) · Manifest V3 · TypeScript (strict) · React 19 · Tailwind CSS 4 · Chart.js · idb (IndexedDB) · chrome.storage · Supabase (Postgres + PostgREST) · Vitest · PGlite · Playwright
 
 ## Instalação
 
@@ -105,6 +109,8 @@ pnpm install
 pnpm build          # gera .output/chrome-mv3
 ```
 
+Para o histórico compartilhado (opcional), crie o banco seguindo [`supabase/README.md`](supabase/README.md) e preencha o `.env` (veja `.env.example`) antes do `pnpm build`.
+
 1. Abra `chrome://extensions` e ative o **Modo do desenvolvedor**.
 2. Clique em **Carregar sem compactação** e selecione a pasta `.output/chrome-mv3`.
 3. Abra um produto em uma das lojas suportadas.
@@ -118,6 +124,7 @@ pnpm build          # gera .output/chrome-mv3
 | `pnpm zip` | Gera o `.zip` para a Chrome Web Store |
 | `pnpm test` | Testes unitários |
 | `pnpm e2e` | Compila e roda o teste de ponta a ponta |
+| `pnpm e2e:community` | Ponta a ponta do histórico compartilhado, com o Supabase simulado |
 | `pnpm compile` | Checagem de tipos |
 | `pnpm assets` | Gera as imagens da Chrome Web Store em `store-assets/` |
 
@@ -126,24 +133,26 @@ pnpm build          # gera .output/chrome-mv3
 ```
 src/
 ├── adapters/        # um arquivo por loja + extração genérica (base.ts)
+├── community/       # histórico compartilhado: cliente REST, envio, mescla
 ├── core/            # preço, datas, classificação, IndexedDB, verificador de alertas
 ├── content/         # observador de mudanças na página
 ├── background/      # fetch + offscreen, notificações
 ├── ui/              # selo, painel e gráfico
 ├── popup/           # abas do popup e configurações
 └── entrypoints/     # background, content, popup, options, offscreen
-tests/               # unitários e fixtures por loja
+supabase/            # migration do banco do histórico compartilhado
+tests/               # unitários, fixtures por loja e testes do SQL
 scripts/             # e2e, imagens da loja, ícones
 store-assets/        # capturas e textos da Chrome Web Store
 ```
 
 ## Privacidade
 
-O histórico fica apenas no IndexedDB do navegador. A única comunicação de rede é a consulta à página pública dos produtos que você marcou como "Acompanhando". [Política de privacidade completa](docs/privacidade.html).
+Por padrão, o histórico fica apenas no IndexedDB do navegador. A única comunicação de rede é a consulta à página pública dos produtos que você marcou como "Acompanhando". O histórico compartilhado só funciona se você ligar a opção, e mesmo assim envia apenas loja, ID do produto e preço. [Política de privacidade completa](docs/privacidade.html).
 
 ## Próximos passos
 
-- [ ] **Histórico compartilhado (opcional, desligado por padrão)** com Supabase. A extensão enviaria só loja, ID do produto, preço e data, sem dados pessoais nem histórico de navegação. Haveria validação de preços absurdos e limite de envios por instalação, para o gráfico já aparecer preenchido.
+- [x] Histórico compartilhado opcional com Supabase
 - [ ] Fixtures com HTML real de cada loja, renovadas periodicamente.
 - [ ] Versão para Firefox (o WXT já suporta).
 

@@ -46,7 +46,7 @@ const rec = (day: string, price: number, listPrice: number | null = null): Price
 
 function view(history: PriceRecord[]): ProductView {
   const last = history[history.length - 1]!;
-  return { product, history, verdict: classify(history, last, last.day) };
+  return { product, history, verdict: classify(history, last, last.day), communityDays: 0, sharing: false };
 }
 
 /** Elemento hospedeiro do selo (o shadow root é fechado). */

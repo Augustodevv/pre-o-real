@@ -25,6 +25,8 @@ export interface PriceRecord {
   listPrice: number | null;
   pixPrice: number | null;
   capturedAt: number;
+  /** Veio do histórico compartilhado (não é salvo no IndexedDB). */
+  community?: boolean;
 }
 
 export interface Product {

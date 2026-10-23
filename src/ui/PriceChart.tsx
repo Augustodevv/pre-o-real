@@ -58,6 +58,8 @@ export function PriceChart({ history, average, height = 180 }: Props) {
             fill: true,
             tension: 0.25,
             pointRadius: points.length > 40 ? 0 : 3,
+            // Pontos vazados: dias que vieram do histórico compartilhado.
+            pointBackgroundColor: history.map((r) => (r.community ? '#ffffff' : '#059669')),
             pointHoverRadius: 5,
           },
           ...(pixPoints.length

@@ -39,8 +39,11 @@ Marque produtos para acompanhar, defina um preço-alvo e receba uma notificaçã
 ★ LOJAS SUPORTADAS
 Mercado Livre, Amazon Brasil, Magazine Luiza, KaBuM! e Casas Bahia.
 
+★ HISTÓRICO COMPARTILHADO (OPCIONAL)
+Se quiser, ligue o histórico compartilhado: o gráfico já aparece preenchido com os preços vistos por outros usuários. São enviados apenas loja, ID do produto e preço, de forma anônima. A opção vem desligada.
+
 ★ PRIVACIDADE EM PRIMEIRO LUGAR
-• Sem cadastro e sem servidor: todo o histórico fica salvo só no seu navegador.
+• Sem cadastro: por padrão, todo o histórico fica salvo só no seu navegador.
 • A extensão acessa apenas os sites das 5 lojas suportadas.
 • Exporte seus dados em JSON ou apague tudo com um clique.
 
@@ -75,7 +78,9 @@ Para gerar de novo: `pnpm assets`.
 **Código remoto:** Não, todo o código está no pacote.
 
 **Uso de dados:** marque que a extensão **não coleta** nenhuma das categorias de dados do usuário.
-Os dados de produtos ficam apenas no armazenamento local do navegador.
+Os dados de produtos ficam no armazenamento local do navegador. O histórico compartilhado (opcional,
+desligado por padrão) envia apenas loja, ID do produto e preço, sem nenhum dado pessoal e sem histórico
+de navegação. Descreva isso no campo de justificativa, se o formulário pedir.
 
 **URL da política de privacidade:**
 `https://augustodevv.github.io/pre-o-real/privacidade.html`
