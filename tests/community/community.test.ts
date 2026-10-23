@@ -18,7 +18,7 @@ describe('cliente do histórico compartilhado', () => {
     const client = createCommunityClient(URL_, 'sb_publishable_123456789012345678901', fetchFn);
     expect(await client.submitPrice('kabum', '475647', 1899.99, 'inst-1')).toBe('ok');
     const [url, init] = fetchFn.mock.calls[0] as unknown as [string, RequestInit];
-    expect(url).toBe(`${URL_}/rest/v1/rpc/submit_price`);
+    expect(url).toBe(`${URL_}/rest/v1/rpc/preco_real_submit_price`);
     expect(JSON.parse(String(init.body))).toEqual({
       p_store: 'kabum',
       p_product_id: '475647',

@@ -11,7 +11,7 @@ Mercado Livre · Amazon Brasil · Magazine Luiza · KaBuM! · Casas Bahia
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![Testes](https://img.shields.io/badge/testes-95%20%2B%20E2E-059669)
+![Testes](https://img.shields.io/badge/testes-96%20%2B%20E2E-059669)
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-informational)
 
 <img src="store-assets/1-desconto-suspeito.png" alt="Painel do Preço Real mostrando um desconto suspeito em uma página de produto" width="820">
@@ -82,12 +82,12 @@ flowchart LR
 - **O selo não quebra o layout**: fica num Shadow DOM fechado, posicionado sobre a página. O conteúdo da linha do preço é medido com `Range` para o selo ficar logo depois do texto, sem cobrir nada.
 - **Verificação em segundo plano sem DOM**: o service worker do MV3 não tem `DOMParser`. O HTML baixado vai para um documento *offscreen*, que roda **os mesmos adaptadores** usados na página.
 - **Regras de classificação puras e testadas** (`src/core/classify.ts`), com os limites em constantes fáceis de ajustar.
-- **Histórico compartilhado seguro por padrão**: as tabelas no Supabase ficam fechadas (RLS sem políticas) e o público só chama duas funções. O servidor valida loja, ID e faixa de preço, rejeita valores 5× fora da mediana, limita 300 envios por instalação por dia e guarda só o hash do ID aleatório da instalação. O histórico usa a mediana diária, o que dilui dados falsos. A extensão fala direto com a API REST (PostgREST), sem a biblioteca `supabase-js`. Detalhes em [`supabase/README.md`](supabase/README.md).
+- **Histórico compartilhado seguro por padrão**: as tabelas ficam num schema isolado do Supabase (`preco_real`), fechadas (RLS sem políticas e sem acesso ao schema), e o público só chama duas funções. O servidor valida loja, ID e faixa de preço, rejeita valores 5× fora da mediana, limita 300 envios por instalação por dia e guarda só o hash do ID aleatório da instalação. O histórico usa a mediana diária, o que dilui dados falsos. A extensão fala direto com a API REST (PostgREST), sem a biblioteca `supabase-js`. Detalhes em [`supabase/README.md`](supabase/README.md).
 - **Formatação brasileira em todo lugar**: `R$ 1.234,56`, datas `dd/mm/aaaa` e interpretação de preços como "1.299", "R$ 1.299,90" ou "1299.90" (JSON-LD).
 
 ### Testes
 
-- **95 testes** (Vitest + jsdom + fake-indexeddb): leitura de preços, classificação, armazenamento, exportação e importação, verificador de alertas, posicionamento do selo, painel, histórico compartilhado e um teste por loja.
+- **96 testes** (Vitest + jsdom + fake-indexeddb): leitura de preços, classificação, armazenamento, exportação e importação, verificador de alertas, posicionamento do selo, painel, histórico compartilhado e um teste por loja.
 - **O SQL do Supabase é testado de verdade** num Postgres em memória ([PGlite](https://pglite.dev)): envio, mediana, validações, rejeição de preços absurdos, limite de envios e bloqueio de acesso direto às tabelas.
 - **Fixtures de páginas** em `tests/fixtures/<loja>/`, cada uma com um `.json` do resultado esperado. Quando uma loja muda o layout, o teste da fixture falha. Para adicionar uma página real, salve-a com Ctrl+S e veja `tests/fixtures/README.md`.
 - **Ponta a ponta** (`pnpm e2e`, Playwright): carrega a extensão compilada no Chromium, abre as fixtures nos domínios reais (com as requisições interceptadas), confere o IndexedDB, clica no selo, executa a verificação automática e confere a notificação. O `pnpm e2e:community` confere que nada é enviado com a opção desligada e que, ligada, só loja, ID, preço e instalação saem do navegador.
@@ -109,7 +109,7 @@ pnpm install
 pnpm build          # gera .output/chrome-mv3
 ```
 
-Para o histórico compartilhado (opcional), crie o banco seguindo [`supabase/README.md`](supabase/README.md) e preencha o `.env` (veja `.env.example`) antes do `pnpm build`.
+O build já vem configurado para o histórico compartilhado em produção (`.env.production`). Para usar o seu próprio banco, siga [`supabase/README.md`](supabase/README.md).
 
 1. Abra `chrome://extensions` e ative o **Modo do desenvolvedor**.
 2. Clique em **Carregar sem compactação** e selecione a pasta `.output/chrome-mv3`.

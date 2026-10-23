@@ -47,14 +47,14 @@ export function createCommunityClient(
 
   return {
     submitPrice: (store, productId, price, installation) =>
-      rpc<SubmitResult>('submit_price', {
+      rpc<SubmitResult>('preco_real_submit_price', {
         p_store: store,
         p_product_id: productId,
         p_price: price,
         p_installation: installation,
       }),
     async getHistory(store, productId) {
-      const rows = await rpc<{ day: string; price: number | string; reports: number }[]>('get_price_history', {
+      const rows = await rpc<{ day: string; price: number | string; reports: number }[]>('preco_real_get_price_history', {
         p_store: store,
         p_product_id: productId,
       });

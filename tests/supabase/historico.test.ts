@@ -9,7 +9,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
  * Os papéis anon/authenticated são criados aqui como no Supabase.
  */
 const MIGRATION = readFileSync(
-  join(__dirname, '../../supabase/migrations/20261023000000_historico_compartilhado.sql'),
+  join(__dirname, '../../supabase/migrations/20261023000000_preco_real_historico_compartilhado.sql'),
   'utf8',
 );
 const A = '11111111-1111-4111-8111-111111111111';
@@ -22,13 +22,13 @@ let db: PGlite;
 async function submit(store: string, id: string, price: number, installation: string, role = 'anon') {
   await db.exec(`set role ${role}`);
   try {
-    const r = await db.query<{ submit_price: string }>('select public.submit_price($1, $2, $3, $4)', [
+    const r = await db.query<{ preco_real_submit_price: string }>('select public.preco_real_submit_price($1, $2, $3, $4)', [
       store,
       id,
       price,
       installation,
     ]);
-    return r.rows[0]!.submit_price;
+    return r.rows[0]!.preco_real_submit_price;
   } finally {
     await db.exec('reset role');
   }
@@ -38,7 +38,7 @@ async function history(store: string, id: string) {
   await db.exec('set role anon');
   try {
     const r = await db.query<{ day: Date; price: string; reports: number }>(
-      'select * from public.get_price_history($1, $2)',
+      'select * from public.preco_real_get_price_history($1, $2)',
       [store, id],
     );
     return r.rows.map((row) => ({ price: Number(row.price), reports: row.reports }));
@@ -49,8 +49,11 @@ async function history(store: string, id: string) {
 
 beforeEach(async () => {
   db = new PGlite();
+  // Como no Supabase: papéis anon/authenticated e permissões automáticas no schema public.
   await db.exec(`create role anon nologin; create role authenticated nologin;
-    grant usage on schema public to anon, authenticated;`);
+    grant usage on schema public to anon, authenticated;
+    alter default privileges in schema public grant all on tables to anon, authenticated;
+    alter default privileges in schema public grant all on functions to anon, authenticated;`);
   await db.exec(MIGRATION);
 });
 
@@ -71,7 +74,7 @@ describe('submit_price e get_price_history', () => {
 
   it('não guarda o ID da instalação, só o hash', async () => {
     await submit('magalu', '237645600', 899, A);
-    const r = await db.query<{ installation: string }>('select installation from public.price_reports');
+    const r = await db.query<{ installation: string }>('select installation from preco_real.price_reports');
     expect(r.rows[0]!.installation).toMatch(/^[0-9a-f]{64}$/);
     expect(r.rows[0]!.installation).not.toContain('1111');
   });
@@ -92,9 +95,9 @@ describe('submit_price e get_price_history', () => {
 
   it('limita envios por instalação em 24 horas', async () => {
     const hash = await db.query<{ h: string }>(`select encode(sha256(convert_to($1, 'UTF8')), 'hex') as h`, [A]);
-    await db.exec(`insert into public.products values ('kabum', '999', now())`);
+    await db.exec(`insert into preco_real.products values ('kabum', '999', now())`);
     await db.query(
-      `insert into public.price_reports (store, product_id, day, installation, price)
+      `insert into preco_real.price_reports (store, product_id, day, installation, price)
        select 'kabum', '999', current_date - g, $1, 10 from generate_series(1, 300) g`,
       [hash.rows[0]!.h],
     );
@@ -106,16 +109,22 @@ describe('submit_price e get_price_history', () => {
 describe('acesso público', () => {
   it('anon não lê nem escreve nas tabelas diretamente', async () => {
     await db.exec('set role anon');
-    await expect(db.query('select * from public.price_reports')).rejects.toThrow(/permission denied/);
+    await expect(db.query('select * from preco_real.price_reports')).rejects.toThrow(/permission denied/);
     await expect(
-      db.query(`insert into public.products (store, product_id) values ('kabum', '1')`),
+      db.query(`insert into preco_real.products (store, product_id) values ('kabum', '1')`),
     ).rejects.toThrow(/permission denied/);
     await db.exec('reset role');
   });
 
   it('anon não executa funções internas', async () => {
     await db.exec('set role anon');
-    await expect(db.query('select * from public.preco_real_limits()')).rejects.toThrow(/permission denied/);
+    await expect(db.query('select * from preco_real.limits()')).rejects.toThrow(/permission denied/);
+    await db.exec('reset role');
+  });
+
+  it('anon não acessa o schema preco_real', async () => {
+    await db.exec('set role anon');
+    await expect(db.query('select * from preco_real.products')).rejects.toThrow(/permission denied/);
     await db.exec('reset role');
   });
 });

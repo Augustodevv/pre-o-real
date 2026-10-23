@@ -15,11 +15,11 @@ const submits = [];
 let historyCalls = 0;
 await ctx.route(/^https?:\/\//, async (route) => {
   const req = route.request(); const url = req.url();
-  if (url.startsWith('https://teste123.supabase.co/rest/v1/rpc/submit_price')) {
+  if (url.startsWith('https://teste123.supabase.co/rest/v1/rpc/preco_real_submit_price')) {
     submits.push({ body: JSON.parse(req.postData()), apikey: req.headers()['apikey'] });
     return route.fulfill({ contentType: 'application/json', body: '"ok"', headers: { 'access-control-allow-origin': '*' } });
   }
-  if (url.startsWith('https://teste123.supabase.co/rest/v1/rpc/get_price_history')) {
+  if (url.startsWith('https://teste123.supabase.co/rest/v1/rpc/preco_real_get_price_history')) {
     historyCalls++;
     const days = [];
     for (let ago = 30; ago >= 1; ago -= 3) { const d = new Date(); d.setDate(d.getDate() - ago); days.push({ day: d.toISOString().slice(0, 10), price: 2299.9, reports: 4 }); }
