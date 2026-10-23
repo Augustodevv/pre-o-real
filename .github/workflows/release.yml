@@ -1,9 +1,10 @@
-# Ao criar uma tag v*, compila a extensão, roda os testes e publica o .zip numa Release.
+# Ao atualizar a branch "release", compila a extensão, roda os testes e publica o .zip numa
+# Release com a tag v<versão do package.json>. Para lançar: git push origin main:release
 name: Release
 
 on:
   push:
-    tags: ['v*']
+    branches: [release]
   workflow_dispatch:
 
 permissions:
@@ -27,8 +28,14 @@ jobs:
       - run: pnpm zip
       - name: Nome fixo para o link "Baixar" do site
         run: cp .output/preco-real-*-chrome.zip preco-real-chrome.zip
+      - id: versao
+        run: echo "tag=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.versao.outputs.tag }}
+          name: Preço Real ${{ steps.versao.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          make_latest: true
           files: preco-real-chrome.zip
           generate_release_notes: false
           body: |
