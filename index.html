@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preço Real — histórico de preços e descontos de verdade</title>
+  <meta name="description" content="Extensão para Chrome que mostra o histórico de preços no Mercado Livre, Amazon, Magalu, KaBuM! e Casas Bahia e avisa quando o desconto é maquiagem.">
+  <link rel="icon" href="icone-512.png">
+  <style>
+    :root { color-scheme: light dark; --verde: #059669; }
+    body { margin: 0; font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #0f172a; background: #f8fafc; }
+    header { background: linear-gradient(135deg, #064e3b, #059669 60%, #34d399); color: #fff; padding: 56px 20px 64px; text-align: center; }
+    header img.logo { width: 88px; height: 88px; }
+    h1 { margin: 12px 0 4px; font-size: 2.4rem; }
+    header p { margin: 0 auto; max-width: 620px; opacity: .95; font-size: 1.15rem; }
+    .botoes { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .botoes a { background: #fff; color: #065f46; text-decoration: none; font-weight: 700; padding: 10px 18px; border-radius: 10px; }
+    .botoes a.sec { background: transparent; color: #fff; border: 2px solid #fff; }
+    main { max-width: 900px; margin: -32px auto 48px; padding: 0 20px; }
+    .print { width: 100%; border-radius: 14px; box-shadow: 0 20px 50px -20px #0006; display: block; }
+    .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 32px; }
+    .card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 1px 3px #0001; }
+    .card h2 { margin: 0 0 6px; font-size: 1.05rem; }
+    .card p { margin: 0; color: #475569; font-size: .95rem; }
+    footer { text-align: center; color: #64748b; font-size: .9rem; padding: 0 20px 40px; }
+    footer a { color: var(--verde); }
+    @media (prefers-color-scheme: dark) {
+      body { background: #0f172a; color: #e2e8f0; }
+      .card { background: #1e293b; } .card p { color: #cbd5e1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img class="logo" src="icone-512.png" alt="">
+    <h1>Preço Real</h1>
+    <p>Extensão para Chrome que mostra o histórico de preços das lojas brasileiras e avisa quando a “promoção” é maquiagem.</p>
+    <div class="botoes">
+      <a href="https://github.com/Augustodevv/pre-o-real">Ver no GitHub</a>
+      <a class="sec" href="privacidade.html">Política de privacidade</a>
+    </div>
+  </header>
+  <main>
+    <img class="print" src="1-desconto-suspeito.png" alt="Painel do Preço Real mostrando um desconto suspeito">
+    <div class="grade">
+      <div class="card"><h2>🟢🟡🔴 Selo na página</h2><p>Bom preço, normal ou alto, comparado à média dos últimos 30 dias.</p></div>
+      <div class="card"><h2>⚠️ Desconto suspeito</h2><p>Avisa quando o preço “de” nunca existiu ou subiu logo antes da promoção.</p></div>
+      <div class="card"><h2>📈 Histórico e alertas</h2><p>Gráfico do preço e notificação quando cair abaixo do seu preço-alvo.</p></div>
+      <div class="card"><h2>🔒 Privacidade</h2><p>Sem cadastro. O histórico fica no seu navegador; o compartilhado é opcional e anônimo.</p></div>
+    </div>
+  </main>
+  <footer>Mercado Livre · Amazon · Magazine Luiza · KaBuM! · Casas Bahia<br>Código aberto — <a href="https://github.com/Augustodevv/pre-o-real">github.com/Augustodevv/pre-o-real</a></footer>
+</body>
+</html>
