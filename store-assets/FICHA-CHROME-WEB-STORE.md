@@ -84,4 +84,5 @@ de navegação. Descreva isso no campo de justificativa, se o formulário pedir.
 
 **URL da política de privacidade:**
 `https://augustodevv.github.io/pre-o-real/privacidade.html`
-(ative o GitHub Pages: Settings → Pages → Branch `main`, pasta `/docs`).
+(o site já está pronto na branch `gh-pages`; para publicar: Settings → Pages → Source
+"Deploy from a branch" → Branch `gh-pages`, pasta `/ (root)` → Save).
