@@ -2,9 +2,9 @@
 name: GitHub Pages
 
 on:
+  # O conteúdo vem da branch gh-pages; qualquer push na main republica o site.
   push:
     branches: [main]
-    paths: ['docs/privacidade.html', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
