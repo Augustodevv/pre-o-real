@@ -8,6 +8,8 @@
 
 Mercado Livre · Amazon Brasil · Magazine Luiza · KaBuM! · Casas Bahia
 
+**[Site do projeto](https://augustodevv.github.io/pre-o-real/)** · **[Política de privacidade](https://augustodevv.github.io/pre-o-real/privacidade.html)**
+
 ![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
@@ -151,7 +153,7 @@ store-assets/        # capturas e textos da Chrome Web Store
 
 ## Privacidade
 
-Por padrão, o histórico fica apenas no IndexedDB do navegador. A única comunicação de rede é a consulta à página pública dos produtos que você marcou como "Acompanhando". O histórico compartilhado só funciona se você ligar a opção, e mesmo assim envia apenas loja, ID do produto e preço. [Política de privacidade completa](docs/privacidade.html).
+Por padrão, o histórico fica apenas no IndexedDB do navegador. A única comunicação de rede é a consulta à página pública dos produtos que você marcou como "Acompanhando". O histórico compartilhado só funciona se você ligar a opção, e mesmo assim envia apenas loja, ID do produto e preço. [Política de privacidade completa](https://augustodevv.github.io/pre-o-real/privacidade.html).
 
 ## Próximos passos
 

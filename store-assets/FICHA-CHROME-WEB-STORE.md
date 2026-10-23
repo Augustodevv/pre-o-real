@@ -83,6 +83,7 @@ desligado por padrão) envia apenas loja, ID do produto e preço, sem nenhum dad
 de navegação. Descreva isso no campo de justificativa, se o formulário pedir.
 
 **URL da política de privacidade:**
-`https://augustodevv.github.io/pre-o-real/privacidade.html`
-(o site já está pronto na branch `gh-pages`; para publicar: Settings → Pages → Source
-"Deploy from a branch" → Branch `gh-pages`, pasta `/ (root)` → Save).
+`https://augustodevv.github.io/pre-o-real/privacidade.html` (no ar; publicada pela branch
+`gh-pages` via `.github/workflows/pages.yml`).
+
+**Site do projeto:** `https://augustodevv.github.io/pre-o-real/`
